@@ -3,9 +3,9 @@ using cofrinho.core.Entities;
 
 namespace cofrinho.core.Specifications;
 
-public class ListagemObjetivosSpecification : Specification<Objetivo>
+public class ListagemObjetivosSpec : Specification<Objetivo>
 {
-    public ListagemObjetivosSpecification()
+    public ListagemObjetivosSpec()
     {
         Query.AsNoTracking()
             .Where(x => !x.EstaDeletado);

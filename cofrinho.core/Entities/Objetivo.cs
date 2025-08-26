@@ -111,4 +111,9 @@ public class Objetivo : BaseEntity
     {
         MarkAsDeleted();
     }
+    
+    public void AdicionarTransacao(Transacao transacao)
+    {
+        _transacoes.Add(transacao);
+    }
 }

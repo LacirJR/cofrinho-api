@@ -36,9 +36,6 @@ public class ObjetivoConfiguration : IEntityTypeConfiguration<Objetivo>
         builder.Property(o => o.Status).HasConversion<string>().IsRequired();
         builder.Property(o => o.Categoria).HasConversion<string>().IsRequired();
         
-        builder.HasMany<Transacao>()
-            .WithOne(x => x.Objetivo)
-            .HasForeignKey(x => x.ObjetivoId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 }

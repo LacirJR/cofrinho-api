@@ -48,7 +48,6 @@ namespace cofrinho.infrastructure.Persistence.Migrations
                     Tipo = table.Column<string>(type: "text", nullable: false),
                     DataTransacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ObjetivoId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjetivoId1 = table.Column<Guid>(type: "uuid", nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DataAtualizacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EstaDeletado = table.Column<bool>(type: "boolean", nullable: false)
@@ -63,13 +62,6 @@ namespace cofrinho.infrastructure.Persistence.Migrations
                         principalTable: "Objetivos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Transacoes_Objetivos_ObjetivoId1",
-                        column: x => x.ObjetivoId1,
-                        principalSchema: "Cofrinho",
-                        principalTable: "Objetivos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -77,12 +69,6 @@ namespace cofrinho.infrastructure.Persistence.Migrations
                 schema: "Cofrinho",
                 table: "Transacoes",
                 column: "ObjetivoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transacoes_ObjetivoId1",
-                schema: "Cofrinho",
-                table: "Transacoes",
-                column: "ObjetivoId1");
         }
 
         /// <inheritdoc />

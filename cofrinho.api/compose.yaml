@@ -26,7 +26,20 @@
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - 5435:5432    
-    
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq-cofrinho-api
+    networks:
+      - backend
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+
 networks:
   backend:
 

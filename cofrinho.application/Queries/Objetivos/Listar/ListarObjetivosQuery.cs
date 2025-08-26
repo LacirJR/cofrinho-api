@@ -13,17 +13,15 @@ public record ListarObjetivosQuery(int Page = 1, int PageSize = 10) : IRequest<R
 internal class ListarObjetivosQueryHandler : IRequestHandler<ListarObjetivosQuery, ResultViewModel<PagedResult<ObjetivoViewModel>>>
 {
     private readonly IObjetivoRepository _objetivoRepository;
-    private readonly IMapper _mapper;
 
     public ListarObjetivosQueryHandler(IObjetivoRepository objetivoRepository, IMapper mapper)
     {
         _objetivoRepository = objetivoRepository;
-        _mapper = mapper;
     }
 
     public async Task<ResultViewModel<PagedResult<ObjetivoViewModel>>> Handle(ListarObjetivosQuery request, CancellationToken cancellationToken)
     {
-        var spec = new ListagemObjetivosSpecification();
+        var spec = new ListagemObjetivosSpec();
 
         var totalItems = await _objetivoRepository.CountAsync(spec, cancellationToken);
         
@@ -33,7 +31,7 @@ internal class ListarObjetivosQueryHandler : IRequestHandler<ListarObjetivosQuer
         
         var objetivos = await _objetivoRepository.ListAsync(spec, cancellationToken);
 
-        var dtos = _mapper.Map<List<ObjetivoViewModel>>(objetivos);
+        var dtos = ObjetivoViewModel.FromEntities(objetivos);
         
         var pagedResult = new PagedResult<ObjetivoViewModel>(dtos, totalItems, request.Page, request.PageSize);
         

@@ -1,7 +1,10 @@
 ﻿using cofrinho.application.Commands.Objetivos.Criar;
 using cofrinho.application.Commands.Objetivos.Editar;
 using cofrinho.application.Commands.Objetivos.Remover;
+using cofrinho.application.Commands.Transacoes.Criar;
 using cofrinho.application.Models;
+using cofrinho.application.Models.Objetivos;
+using cofrinho.application.Queries.Objetivos.BuscarPorId;
 using cofrinho.application.Queries.Objetivos.Listar;
 using MediatR;
 using Microsoft.OpenApi.Models;
@@ -9,7 +12,7 @@ using Sprache;
 
 namespace cofrinho_api.Routes;
 
-public static class ObjetivoRoutes
+public static class CofrinhoRoutes
 {
     public static WebApplication UseRoutes(this WebApplication builder)
     {
@@ -31,8 +34,9 @@ public static class ObjetivoRoutes
                 return Results.BadRequest();
             }).WithName("GetObjetivos")
             .WithSummary("Listar os Objetivos")
-            .Produces<string>(StatusCodes.Status200OK)
-            .Produces<string>(StatusCodes.Status201Created);
+            .WithDescription("Listar os objetivos ativos paginados")
+            .Produces<ResultViewModel<PagedResult<ObjetivoViewModel>>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status204NoContent);
 
         routeGroup.MapPost("/", async (ISender sender, CriarObjetivoCommand command) =>
             {
@@ -44,11 +48,28 @@ public static class ObjetivoRoutes
                 return Results.BadRequest(result);
             }).WithName("CriarObjetivo")
             .WithSummary("Criar um Objetivo")
-            .Produces<ResultViewModel>(StatusCodes.Status201Created)
+            .Produces<ResultViewModel<Guid>>(StatusCodes.Status201Created)
             .Produces<ResultViewModel>(StatusCodes.Status400BadRequest);
 
 
-        routeGroup.MapPut("/{id}", async (ISender sender, Guid id, EditarObjetivoByIdCommand request) =>
+        routeGroup.MapGet("/{id:guid}", async (ISender sender, Guid id) =>
+            {
+                var command = new BuscarObjetivoPorIdCommand(id);
+
+                var result = await sender.Send(command);
+
+                if (result.IsSuccess)
+                    return Results.Ok(result);
+
+                return Results.BadRequest(result);
+            }).WithName("ObterObjetivo")
+            .WithSummary("Obter um Objetivo")
+            .WithDescription("Obter um Objetivo com Transações")
+            .Produces<ResultViewModel<ObjetivoComTransacoesViewModel>>(StatusCodes.Status200OK)
+            .Produces<ResultViewModel>(StatusCodes.Status400BadRequest);
+
+        
+        routeGroup.MapPut("/{id:guid}", async (ISender sender, Guid id, EditarObjetivoByIdCommand request) =>
             {
                 var command = request with { Id = id };
 
@@ -63,7 +84,7 @@ public static class ObjetivoRoutes
             .Produces<ResultViewModel>(StatusCodes.Status200OK)
             .Produces<ResultViewModel>(StatusCodes.Status400BadRequest);
 
-        routeGroup.MapDelete("/{id}", async (ISender sender, Guid id) =>
+        routeGroup.MapDelete("/{id:guid}", async (ISender sender, Guid id) =>
             {
                 var command = new RemoverObjetivoCommand(id);
 
@@ -79,6 +100,25 @@ public static class ObjetivoRoutes
             .Produces<ResultViewModel>(StatusCodes.Status400BadRequest);
 
 
+
+       var transacaoGroup = routeGroup.MapGroup("{objetivoId:guid}/transacoes").WithName("Transação").WithSummary("Transação")
+            .WithDisplayName("Transação");
+        
+        
+        transacaoGroup.MapPost("/", async (ISender sender, Guid objetivoId, CriarTransacoesCommand request) =>
+        {
+            var command = request with {ObjetivoId = objetivoId};
+            var result = await sender.Send(command);
+            
+            if(result.IsSuccess)
+                return Results.Created("/", result);
+            
+            return Results.BadRequest(result);
+        }).WithName("CriarTransacao")
+        .WithSummary("Criar uma Transação")
+        .Produces<ResultViewModel<Guid>>(StatusCodes.Status201Created)
+        .Produces<ResultViewModel>(StatusCodes.Status400BadRequest);
+        
         return builder;
     }
 }

@@ -8,8 +8,10 @@ using cofrinho.application;
 using cofrinho.application.Extensions;
 using cofrinho.core.Enums;
 using cofrinho.infrastructure.Extensions;
+using cofrinho.infrastructure.Persistence;
 using DotNetEnv;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
@@ -64,8 +66,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
+await app.MigrateDatabaseAsync();
+
+
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseDeveloperExceptionPage(); // Em apps recentes já é automático com o template
 }
 else

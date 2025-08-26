@@ -23,11 +23,7 @@ public class TransacaoConfiguration : IEntityTypeConfiguration<Transacao>
         
         builder.Property(o => o.Tipo).HasConversion<string>().IsRequired();
         builder.Property(o => o.DataTransacao).IsRequired();
-
-        builder.HasOne<Objetivo>()
-            .WithMany(x => x.Transacoes)
-            .HasForeignKey(x => x.ObjetivoId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
     }
     
 }

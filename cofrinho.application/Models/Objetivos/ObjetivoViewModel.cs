@@ -36,4 +36,7 @@ public class ObjetivoViewModel
 
     public static ObjetivoViewModel FromEntity(Objetivo objetivo)
         => objetivo.Adapt<ObjetivoViewModel>(_config);
+    
+    public static List<ObjetivoViewModel> FromEntities(IEnumerable<Objetivo> objetivos)
+        => objetivos.Adapt<List<ObjetivoViewModel>>(_config);
 }

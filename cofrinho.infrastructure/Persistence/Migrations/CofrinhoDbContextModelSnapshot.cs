@@ -84,9 +84,6 @@ namespace cofrinho.infrastructure.Persistence.Migrations
                     b.Property<Guid>("ObjetivoId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ObjetivoId1")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -94,8 +91,6 @@ namespace cofrinho.infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ObjetivoId");
-
-                    b.HasIndex("ObjetivoId1");
 
                     b.ToTable("Transacoes", "Cofrinho");
                 });
@@ -151,15 +146,9 @@ namespace cofrinho.infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("cofrinho.core.Entities.Transacao", b =>
                 {
-                    b.HasOne("cofrinho.core.Entities.Objetivo", null)
+                    b.HasOne("cofrinho.core.Entities.Objetivo", "Objetivo")
                         .WithMany("Transacoes")
                         .HasForeignKey("ObjetivoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("cofrinho.core.Entities.Objetivo", "Objetivo")
-                        .WithMany()
-                        .HasForeignKey("ObjetivoId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
