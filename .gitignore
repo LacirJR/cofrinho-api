@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+#Ia file
+.junie/
+
 # dotenv files
 .env
 

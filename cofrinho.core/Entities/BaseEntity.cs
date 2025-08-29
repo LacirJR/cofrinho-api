@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Flunt.Notifications;
 using MediatR;
 
 namespace cofrinho.core.Entities;
 
-public abstract class BaseEntity : IEquatable<BaseEntity>
+public abstract class BaseEntity : Notifiable<Notification>, IEquatable<BaseEntity>
 {
+    
     public DateTime DataCriacao { get; private set; }
     public DateTime DataAtualizacao { get; private set; }
     public bool EstaDeletado { get; private set; }
@@ -28,6 +30,8 @@ public abstract class BaseEntity : IEquatable<BaseEntity>
     {
         _domainEvents.Clear();
     }
+    
+    
     
     public bool Equals(BaseEntity? other)
     {
