@@ -3,5 +3,6 @@
 public enum TipoTransacaoEnum
 {
     Deposito,
-    Saque
+    Saque,
+    Rendimento
 }

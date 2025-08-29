@@ -8,18 +8,14 @@ using MediatR;
 namespace cofrinho.application.Commands.Objetivos.Editar;
 
 public record EditarObjetivoByIdCommand(
-    Guid Id,
+    [property: JsonIgnore] Guid Id,
     string? Titulo,
     string? Descricao,
     decimal? ValorAlvo,
     TipoMoedaEnum? TipoMoeda,
     DateTime? Prazo,
     StatusObjetivoEnum? Status)
-    : IRequest<ResultViewModel>
-{
-    [JsonIgnore]
-    public Guid Id { get; init; }
-}
+    : IRequest<ResultViewModel>;
 
 internal class EditarObjetivoByIdCommandHandler : IRequestHandler<EditarObjetivoByIdCommand, ResultViewModel>
 {
@@ -53,11 +49,15 @@ internal class EditarObjetivoByIdCommandHandler : IRequestHandler<EditarObjetivo
         
         if (request.ValorAlvo is not null)
         {
-            if(request.TipoMoeda is null)
+            if (request.TipoMoeda is null)
+            {
                 objetivo.AddNotification("TipoMoeda", "Quando envia o valor alvo o tipo moeda não pode ser nulo.");
-
-            objetivo.AlterarValorAlvo(request.ValorAlvo.Value, request.TipoMoeda.Value);
-            propriedadesAlteradas.Add("ValorAlvo", request.ValorAlvo.ToString());
+            }
+            else
+            {
+                objetivo.AlterarValorAlvo(request.ValorAlvo.Value, request.TipoMoeda.Value);
+                propriedadesAlteradas.Add("ValorAlvo", request.ValorAlvo.ToString());
+            }
         }
         
         if (request.Prazo is not null)

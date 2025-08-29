@@ -5,10 +5,7 @@ using MediatR;
 
 namespace cofrinho.application.Commands.Objetivos.Remover;
 
-public class RemoverObjetivoCommand(Guid Id) : IRequest<ResultViewModel>
-{
-    [JsonIgnore] public Guid Id { get; init; }
-}
+public record RemoverObjetivoCommand(Guid Id) : IRequest<ResultViewModel>;
 
 internal class RemoverObjetivoCommandHandler : IRequestHandler<RemoverObjetivoCommand, ResultViewModel>
 {

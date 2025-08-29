@@ -23,4 +23,8 @@
       <ProjectReference Include="..\cofrinho.core\cofrinho.core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="cofrinho.tests" />
+    </ItemGroup>
+
 </Project>
